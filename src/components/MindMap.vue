@@ -1,7 +1,6 @@
 <template>
 
     <div class="mindmap-container">
-        <button @click="createMindmap" class="savebutton">Save</button>
 
         <svg class="mindmap-svg" width="100vw" height="800">
             <g transform="translate(500, 400)">
@@ -155,9 +154,9 @@ async function createMindmap() {
 
 
 
-function handleSave() {
-    console.log('i am calling childmethod kkkkk');
-}
+// function handleSave() {
+//     console.log('i am calling childmethod kkkkk');
+// }
 
 
 const nodeWidth = ref(160);
@@ -193,22 +192,16 @@ const props = defineProps({
     },
     handleSave: {
         type: Boolean,
-        required: true  
+        required: true 
     }
 })
 
-console.log(props.handleSave, 'handle save');
 
-watch(props.handleSave, ()=> {
-    if(props.handleSave) {
-        handleSavedd();
-    }
-})
-
-const handleSavedd = () => {
-    console.log("handle save is called successfully")
-}
-
+watch(() => props.handleSave, (newValue) => {
+  if (newValue) {
+    createMindmap();
+  }
+});
 
 
 

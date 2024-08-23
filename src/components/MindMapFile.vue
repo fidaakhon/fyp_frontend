@@ -233,8 +233,7 @@ const zoomOut = () => {
 };
 const saveMap = ref(false)
 const saveMindmap = () => {
-    console.log('saveMindmap is called');
-    saveMap.value = true
+    saveMap.value = !saveMap.value;
 }
 
 </script>
