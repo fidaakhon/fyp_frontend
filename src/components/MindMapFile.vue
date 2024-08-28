@@ -6,7 +6,7 @@
 
         <MindMap  :mapId="route.params.id" @sendData="receiveData" :NodeBgColor="childData" :layout="layout"
             :style="{ transform: `scale(${transformStyle}) translateX(${contentX}px) translateY(${contentY}px)`, contentStyle }" 
-            :handleSave="saveMap"/>
+            :handleSave="saveMap" :handleDelete="deleteMap"/>
         <div :style="{ right: data ? '0%' : '-100%' }" class="information-container">
             <div class="tab-container">
                 <div @click="() => {
@@ -80,6 +80,7 @@
         </div>
         <div class="zoom-controls">
             <button @click="saveMindmap">Save</button>
+            <button @click="deleteMindmap">Delete</button>
          <RouterLink to="/">  <button>back</button></RouterLink> 
             <button @click="() => {
 
@@ -232,8 +233,13 @@ const zoomOut = () => {
     }
 };
 const saveMap = ref(false)
+const deleteMap = ref(false)
 const saveMindmap = () => {
     saveMap.value = !saveMap.value;
+}
+const deleteMindmap = () => {
+    // console.log("mindmap deleted")
+    deleteMap.value = !deleteMap.value
 }
 
 </script>

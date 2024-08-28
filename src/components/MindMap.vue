@@ -133,8 +133,8 @@ async function createMindmap() {
     // console.log(mapdata, '>>>>>>>>>>>>>> mapdata');
     const mindmap = {
         id: mindmaps.value.length + 1,
-        title: 'Mind Map' + mindmaps.value.length + 1,
-        nodes: nodes.value
+        title: 'Mind Map' + mindmaps.value.length,
+        nodes: nodes?.value
     }
     fetch('http://localhost:8000/api/v1/mindmaps/create-mindmap', {
         method: 'POST',
@@ -150,6 +150,15 @@ async function createMindmap() {
         .catch((error) => {
             console.error('Error:', error);
         });
+}
+
+async function deleteMindMap() {
+fetch(`http://localhost:8000/api/v1/mindmaps/delete-mindmap/${id.value}`,
+    {
+        method: "Delete",
+    }
+)
+.then(router.push("/"))
 }
 
 
@@ -193,6 +202,10 @@ const props = defineProps({
     handleSave: {
         type: Boolean,
         required: true 
+    },
+    handleDelete: {
+        type: Boolean,
+        required: true
     }
 })
 
@@ -204,8 +217,15 @@ watch(() => props.handleSave, (newValue) => {
 });
 
 
+watch(() => props.handleDelete, (newValue) => {
+  if (newValue) {
+    deleteMindMap();
+  }
+});
 
-watch(props, () => {
+
+
+watch(props.mapId, () => {
 
     renderNodes()
     calculateTreeLayout()
