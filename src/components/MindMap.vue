@@ -153,19 +153,15 @@ async function createMindmap() {
 }
 
 async function deleteMindMap() {
-fetch(`http://localhost:8000/api/v1/mindmaps/delete-mindmap/${id.value}`,
-    {
-        method: "Delete",
-    }
-)
-.then(router.push("/"))
+    fetch(`http://localhost:8000/api/v1/mindmaps/delete-mindmap/${id.value}`,
+        {
+            method: "Delete",
+        }
+    )
+        .then(router.push("/"))
 }
 
 
-
-// function handleSave() {
-//     console.log('i am calling childmethod kkkkk');
-// }
 
 
 const nodeWidth = ref(160);
@@ -186,6 +182,8 @@ const suggestionInput = ref(null);
 const suggestions = ref([]);
 const selectedNodes = ref([]);
 const contextMenu = ref(null)
+
+
 const props = defineProps({
     NodeBgColor: {
         type: Object,
@@ -201,7 +199,7 @@ const props = defineProps({
     },
     handleSave: {
         type: Boolean,
-        required: true 
+        required: true
     },
     handleDelete: {
         type: Boolean,
@@ -211,16 +209,16 @@ const props = defineProps({
 
 
 watch(() => props.handleSave, (newValue) => {
-  if (newValue) {
-    createMindmap();
-  }
+    if (newValue) {
+        createMindmap();
+    }
 });
 
 
 watch(() => props.handleDelete, (newValue) => {
-  if (newValue) {
-    deleteMindMap();
-  }
+    if (newValue) {
+        deleteMindMap();
+    }
 });
 
 
@@ -342,7 +340,7 @@ function renderNodes() {
             children: []
         }
     }
-    
+
 }
 // onMounted(() => {
 //     renderNodes()
@@ -527,6 +525,10 @@ function getNodeStyle(node) {
     }
 
 }
+
+watch(() => props.layout, () => {
+    calculateTreeLayout();
+});
 const calculateTreeLayout = () => {
     if (props.layout == 'RTL') {
 
