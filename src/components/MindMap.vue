@@ -204,6 +204,10 @@ const props = defineProps({
     handleDelete: {
         type: Boolean,
         required: true
+    },
+    handleUpdate : {
+        type: Boolean,
+        required: true
     }
 })
 
@@ -220,6 +224,34 @@ watch(() => props.handleDelete, (newValue) => {
         deleteMindMap();
     }
 });
+
+watch(() => props.handleUpdate, (newValue) => {
+    if (newValue) {
+        updateMindMap();
+    }
+});
+
+const updateMindMap = () => {
+    const mindmap = {
+        id: id.value,
+        title: 'Mind Map' + id.value,
+        nodes: nodes?.value
+    }
+    fetch(`http://localhost:8000/api/v1/mindmaps/update-mindmap/${id.value}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mindmap),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
 
 
 

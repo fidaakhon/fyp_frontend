@@ -4,9 +4,9 @@
         ZoomOnScroll(e)
     }">
 
-        <MindMap  :mapId="route.params.id" @sendData="receiveData" :NodeBgColor="childData" :layout="layout"
-            :style="{ transform: `scale(${transformStyle}) translateX(${contentX}px) translateY(${contentY}px)`, contentStyle }" 
-            :handleSave="saveMap" :handleDelete="deleteMap"/>
+        <MindMap :mapId="route.params.id" @sendData="receiveData" :NodeBgColor="childData" :layout="layout"
+            :style="{ transform: `scale(${transformStyle}) translateX(${contentX}px) translateY(${contentY}px)`, contentStyle }"
+            :handleSave="saveMap" :handleDelete="deleteMap" :handleUpdate="updateMap" />
         <div :style="{ right: data ? '0%' : '-100%' }" class="information-container">
             <div class="tab-container">
                 <div @click="() => {
@@ -79,9 +79,10 @@
 
         </div>
         <div class="zoom-controls">
+            <button @click="updateMindmap">update</button>
             <button @click="saveMindmap">Save</button>
             <button @click="deleteMindmap">Delete</button>
-         <RouterLink to="/">  <button>back</button></RouterLink> 
+            <RouterLink to="/"> <button>back</button></RouterLink>
             <button @click="() => {
 
 
@@ -99,7 +100,7 @@
 </template>
 
 
-<script setup> 
+<script setup>
 import { computed, reactive, ref, watch } from 'vue';
 import MindMap from './MindMap.vue';
 import { RouterLink, useRoute } from 'vue-router'
@@ -234,12 +235,16 @@ const zoomOut = () => {
 };
 const saveMap = ref(false)
 const deleteMap = ref(false)
+const updateMap = ref(false)
 const saveMindmap = () => {
     saveMap.value = !saveMap.value;
 }
 const deleteMindmap = () => {
     // console.log("mindmap deleted")
     deleteMap.value = !deleteMap.value
+}
+const updateMindmap = () => {
+    updateMap.value = !updateMap.value
 }
 
 </script>
