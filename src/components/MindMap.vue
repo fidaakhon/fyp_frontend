@@ -118,6 +118,8 @@ import * as d3 from 'd3';
 import { useRouter } from 'vue-router';
 import { ref, watch, onUnmounted, nextTick, onMounted, defineEmits, defineProps } from 'vue';
 import ContextMenu from './CustomContaxtMenu.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 // import { useMindmapsStore } from '@/store/useMindmapsStore';
 
 // const maps = useMindmapsStore();
@@ -146,9 +148,16 @@ async function createMindmap() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
+            toast(data?.message, {
+                autoClose: 3000
+            })
         })
         .catch((error) => {
             console.error('Error:', error);
+            toast("mindmap creation failed", {
+                autoClose: 3000
+            });
+
         });
 }
 
@@ -158,6 +167,19 @@ async function deleteMindMap() {
             method: "Delete",
         }
     )
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            toast("mindmap deleted successfully", {
+                autoClose: 3000
+            })
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            toast("mindmap deletion failed", {
+                autoClose: 3000
+            });
+        })
         .then(router.push("/"))
 }
 
@@ -205,7 +227,7 @@ const props = defineProps({
         type: Boolean,
         required: true
     },
-    handleUpdate : {
+    handleUpdate: {
         type: Boolean,
         required: true
     }
@@ -247,9 +269,15 @@ const updateMindMap = () => {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
+            toast("updated successfully", {
+                autoClose: 3000
+            })
         })
         .catch((error) => {
             console.error('Error:', error);
+            toast("update failed", {
+                autoClose: 3000
+            });
         });
 }
 
