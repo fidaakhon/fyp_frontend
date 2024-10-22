@@ -64,22 +64,14 @@ const handleSignup = () => {
             // Redirect to the login page after successful signup
             console.log('Signup response:', data);
             if (data.success) {
-                toast(message || "Registered Succeddfully", {
-                    autoClose: 4000
-                })
+                toast("Registered Succeddfully")
                 router.push('/signin');
             } else {
-                toast(message || "Something went wrong", {
-                    autoClose: 4000
-                })
+                toast("Something went wrong")
             }
         })
         .catch((error) => {
-            toast({
-                title: 'Signup Error',
-                body: 'An error occurred while creating your account. Please try again.',
-                type: 'error',
-            });
+            toast("Something went wrong");
             console.error('Signup error:', error);
         });
 };
