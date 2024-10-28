@@ -125,8 +125,30 @@ import 'vue3-toastify/dist/index.css';
 // const maps = useMindmapsStore();
 const router = useRouter();
 const id = ref(1);
+const currentUser = ref("")
+
 
 id.value = router.currentRoute.value.params.id
+
+watch(() => {
+    fetch('http://localhost:8000/api/v1/users/current-user', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    })
+
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("dataaaaa", data.data._id)
+            currentUser.value = data.data._id;
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+});
 
 
 async function createMindmap() {
@@ -136,7 +158,8 @@ async function createMindmap() {
     const mindmap = {
         id: mindmaps.value.length + 1,
         title: 'Mind Map' + mindmaps.value.length,
-        nodes: nodes?.value
+        nodes: nodes?.value,
+        userId: currentUser.value
     }
     fetch('http://localhost:8000/api/v1/mindmaps/create-mindmap', {
         method: 'POST',

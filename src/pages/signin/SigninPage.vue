@@ -53,10 +53,13 @@ const form = ref({
   password: ''
 });
 
+
+
 // Sign-in handler
 const handleSignIn = () => {
   fetch('http://localhost:8000/api/v1/users/login', {
     method: 'POST',
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -67,6 +70,7 @@ const handleSignIn = () => {
       if (data.success) {
         // Show success message
         toast.success('Sign in successful! Redirecting...');
+        console.log(data);
 
         // Redirect to the dashboard
         router.push('/');
