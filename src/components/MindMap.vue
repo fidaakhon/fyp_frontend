@@ -137,6 +137,9 @@ watch(() => {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
+        body: JSON.stringify({
+            userId: currentUser.value
+        })
     })
 
         .then((response) => response.json())

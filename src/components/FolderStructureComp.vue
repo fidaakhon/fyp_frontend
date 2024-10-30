@@ -34,13 +34,34 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 // import { useMindmapsStore } from '@/store/useMindmapsStore';
 
 // const maps = useMindmapsStore();
 
 // console.log(maps.mindmaps)
+
+const currentUser = ref(null);
+
+watch(() => {
+  fetch('http://localhost:8000/api/v1/users/current-user', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
+
+    .then((response) => response.json())
+    .then((data) => {
+      currentUser.value = data.data._id;
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+});
 
 
 const mindmaps = ref([]);
@@ -350,7 +371,8 @@ onMounted(() => {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${localStorage.getItem('token')}`
-    }
+    },
+    credentials: 'include',
   })
     .then(response => response.json())
     .then(data => {
