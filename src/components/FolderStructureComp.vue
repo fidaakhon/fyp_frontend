@@ -13,8 +13,7 @@
         <thead>
           <tr>
             <th style="column-width: 300px;">Name</th>
-            <th>Members</th>
-            <th>Modified</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -22,8 +21,10 @@
             <RouterLink :to="`/mindmap/${mindmap.id}`">
               <td>{{ mindmap?.title }}</td>
             </RouterLink>
-            <td>...</td>
-            <td>...</td>
+            <td>
+              <button @click="openMindMap(mindmap.id)">Open</button>
+              <button @click="deleteMindMap(mindmap.id)">Delete</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -34,7 +35,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 // import { useMindmapsStore } from '@/store/useMindmapsStore';
 
@@ -44,7 +45,7 @@ import { useRouter } from 'vue-router';
 
 const currentUser = ref(null);
 
-watch(() => {
+onMounted(() => {
   fetch('http://localhost:8000/api/v1/users/current-user', {
     method: 'GET',
     headers: {
@@ -411,13 +412,31 @@ function createMindMap() {
   router.push(`/mindmap/${mindmaps.value.length + 1}`);
 }
 
+function openMindMap(id) {
+  router.push(`/mindmap/${id}`);
+}
 
-// Function to open an existing mind map by id
-// function openMindMap(id) {
-// Navigate to the 'about' page or a specific mind map route
-// router.push('/about');
-// currentMindMap.value = mindmaps.value.find(mindmap => mindmap.id === id);
-// }
+function deleteMindMap(id) {
+  // mindmaps.value = mindmaps.value.filter((mindmap) => mindmap.id !== id);
+  // localStorage.setItem('mindMapList', JSON.stringify(mindmaps.value));
+  fetch(`http://localhost:8000/api/v1/mindmaps/delete-mindmap/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data, '>>> data');
+      mindmaps.value = mindmaps.value.filter((mindmap) => mindmap.id !== id);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 </script>
 
 <style scoped>
@@ -470,5 +489,15 @@ thead {
   max-width: 1440px;
   margin: auto;
   padding: 20px;
+}
+
+button {
+  background: #3cc553;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0px 15px;
 }
 </style>
