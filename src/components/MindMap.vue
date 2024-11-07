@@ -23,7 +23,7 @@
                             :style="(selectedNode?.id === node?.id || node.editing == true || selectedNodes.some((el) => el.id == node.id)) ? { outline: `4px ${node.borderStyle} #3CC553`, padding: '10px', border: 'none', backgroundColor: getBackgroundColor(node.type), color: node.textColor } : { border: `1px ${node.borderStyle} black`, backgroundColor: getBackgroundColor(node.type), padding: '10px', }"
                             :width="nodeWidth" :height="nodeHeight" style="overflow: visible;display: flex; ">
                             <div style="display: flex; justify-content: start;align-items: center; gap: 2px;">
-                                <img src="../assets/Ellipse4.png" alt="dev">
+                                <!-- <img src="../assets/Ellipse4.png" alt="dev"> -->
 
                                 <span class="label-input" style="text-transform: capitalize;"
                                     v-if="node.type != 'root'">{{ ` ${node.type
@@ -120,9 +120,8 @@ import { ref, watch, onUnmounted, nextTick, onMounted, defineEmits, defineProps 
 import ContextMenu from './CustomContaxtMenu.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-// import { useMindmapsStore } from '@/store/useMindmapsStore';
 
-// const maps = useMindmapsStore();
+
 const router = useRouter();
 const id = ref(1);
 const currentUser = ref("")
@@ -130,34 +129,30 @@ const currentUser = ref("")
 
 id.value = router.currentRoute.value.params.id
 
-watch(() => {
+onMounted(() => {
     fetch('http://localhost:8000/api/v1/users/current-user', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({
-            userId: currentUser.value
-        })
+        // body: JSON.stringify({
+        //     userId: currentUser.value
+        // })
     })
 
         .then((response) => response.json())
         .then((data) => {
-            console.log("dataaaaa", data.data._id)
             currentUser.value = data.data._id;
+            console.log("current userrrr", currentUser.value)
         })
         .catch((error) => {
             console.error('Error:', error);
         });
-
 });
 
 
 async function createMindmap() {
-    // const list = maps.mindmaps;
-    // const mapdata = list.filter((el) => el.id == props.mapId)
-    // console.log(mapdata, '>>>>>>>>>>>>>> mapdata');
     const mindmap = {
         id: mindmaps.value.length + 1,
         title: 'Mind Map' + mindmaps.value.length,
@@ -166,6 +161,7 @@ async function createMindmap() {
     }
     fetch('http://localhost:8000/api/v1/mindmaps/create-mindmap', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -280,6 +276,7 @@ watch(() => props.handleUpdate, (newValue) => {
 });
 
 const updateMindMap = () => {
+    console.log("nodes", nodes.value);
     const mindmap = {
         id: id.value,
         title: 'Mind Map' + id.value,
@@ -364,8 +361,8 @@ const nodes = ref(
     });
 const mindmaps = ref([]);
 
-onMounted(() => {
-    fetch('http://localhost:8000/api/v1/mindmaps/get-all-mindmaps', {
+watch(currentUser,() => {
+    fetch(`http://localhost:8000/api/v1/mindmaps/get-all-mindmaps/${currentUser.value}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -387,28 +384,6 @@ onMounted(() => {
         });
 })
 function renderNodes() {
-    // console.log("rendernodes function called");
-    // const list = JSON.parse(localStorage.getItem('mindMapList'));
-    // const list = maps.mindmaps;
-    // const list = mindmaps.value;
-    // const mapdata = list.filter((el) => el.id == props.mapId)
-    // if (mapdata) {
-    //     nodes.value = mapdata[0].nodes
-    // } else {
-    //     nodes.value = {
-    //         id: 1,
-    //         label: 'Root Node',
-    //         color: '#6BF58A',
-    //         textColor: 'black',
-    //         editing: false,
-    //         borderShape: '',
-    //         borderStyle: "solid",
-    //         type: 'root',
-    //         history: [],
-    //         children: []
-    //     }
-    // }
-    // const list = mindmaps.value;
     const mapdata = mindmaps.value.filter((el) => el.id == id.value)
     if (mapdata) {
         nodes.value = mapdata[0].nodes
@@ -600,21 +575,28 @@ const addSuggestionAsChild = (suggestion) => {
 };
 
 function getNodeStyle(node) {
+    const foundNode = findNodeById(node.id);
 
     if (props.NodeBgColor.value != {} && props.NodeBgColor.value != undefined) {
         if (node.id == props.NodeBgColor.value.id) {
             node.type = props.NodeBgColor.value.type;
+            foundNode.type = props.NodeBgColor.value.type;
             node.textColor = props.NodeBgColor.value.textColor;
+            foundNode.textColor = props.NodeBgColor.value.textColor;
             node.borderStyle = props.NodeBgColor.value.borderStyle;
+            foundNode.borderStyle = props.NodeBgColor.value.borderStyle;
             node.borderShape = props.NodeBgColor.value.borderShape;
+            foundNode.borderShape = props.NodeBgColor.value.borderShape;
         }
-    }
 
+    }
 }
 
 watch(() => props.layout, () => {
     calculateTreeLayout();
 });
+
+
 const calculateTreeLayout = () => {
     if (props.layout == 'RTL') {
 
@@ -671,6 +653,9 @@ const generateColor = (index) => {
     const lightness = 60 + Math.random() * 10;
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+
+
+// edgesss 
 const bezierLinkPath = (link) => {
     const { source, target } = link;
     const controlY = (source.y + target.y) / 2;
@@ -691,6 +676,8 @@ const bezierLinkPath = (link) => {
         return `M${source.x},${source.y} C${controlX},${controlY1} ${controlX},${controlY2} ${target.x},${target.y}`;
     }
 };
+
+
 const onNodeClick = (node) => {
     if (!node.editing) {
         deselectAllNodes();
@@ -824,9 +811,7 @@ document.addEventListener('dblclick', handleClickOutside);
 onUnmounted(() => {
     document.removeEventListener('dblclick', handleClickOutside);
 });
-onMounted(() => {
-    // document.addEventListener('keydown', handleKeyDown);
-});
+
 
 onUnmounted(() => {
     document.removeEventListener('keydown', handleKeyDown);

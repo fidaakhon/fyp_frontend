@@ -19,7 +19,7 @@
                     tab = 'log'
                 }">Log</div>
             </div>
-            <div v-if="tab == 'info'">
+            <!-- <div v-if="tab == 'info'">
 
                 <h1>{{ data.label }}</h1>
                 <h4>Description</h4>
@@ -35,7 +35,7 @@
                     <li>Iman</li>
                     <li>Fida</li>
                 </ul> <br>
-            </div>
+            </div> -->
             <div v-if="tab == 'format'">
                 <br> <br>
                 <label for="bg-color">Type:</label>

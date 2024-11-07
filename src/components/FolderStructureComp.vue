@@ -6,6 +6,7 @@
         <span style="font-size: 40px;">+</span>
         <span>Blank Map</span>
       </div>
+      <button @click="logout">logout</button>
     </div>
     <div>
       <h3>All Maps</h3>
@@ -35,8 +36,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 // import { useMindmapsStore } from '@/store/useMindmapsStore';
 
 // const maps = useMindmapsStore();
@@ -57,12 +60,15 @@ onMounted(() => {
     .then((response) => response.json())
     .then((data) => {
       currentUser.value = data.data._id;
+      console.log('current userrrr', currentUser.value);
     })
     .catch((error) => {
       console.error('Error:', error);
     });
 
 });
+
+
 
 
 const mindmaps = ref([]);
@@ -366,24 +372,25 @@ const router = useRouter();
 // })
 // Function to create a new mind map
 
-onMounted(() => {
-  fetch('http://localhost:8000/api/v1/mindmaps/get-all-mindmaps', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    },
-    credentials: 'include',
-  })
-    .then(response => response.json())
-    .then(data => {
-      // console.log(data, '>>> data');
-      mindmaps.value = data.message;
-      // console.log(mindmaps.value, '>>>>>>>> mindmaps');
+watch(currentUser, () => {
+  if (currentUser != null) {
+    fetch(`http://localhost:8000/api/v1/mindmaps/get-all-mindmaps/${currentUser.value}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        console.log(data, '>>> data all maps');
+        mindmaps.value = data.message;
+        // console.log(mindmaps.value, '>>>>>>>> mindmaps');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
   // maps.initialize();
   // mindmaps.value = maps.mindmaps;
 })
@@ -434,6 +441,25 @@ function deleteMindMap(id) {
     })
     .catch((error) => {
       console.error('Error:', error);
+    });
+}
+
+function logout() {
+  fetch('http://localhost:8000/api/v1/users/logout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  })
+    .then(response => response.json())
+    .then(data => {
+      toast.success(data.message || 'Logout successful! Redirecting...');
+      router.push('/signin');
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      toast.error('An error occurred. Please try again.');
     });
 }
 

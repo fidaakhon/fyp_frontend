@@ -56,33 +56,35 @@ const form = ref({
 
 
 // Sign-in handler
-const handleSignIn = () => {
-  fetch('http://localhost:8000/api/v1/users/login', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(form.value)
-  })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        // Show success message
-        toast.success('Sign in successful! Redirecting...');
-        console.log(data);
-
-        // Redirect to the dashboard
-        router.push('/');
-      } else {
-        // Show error message
-        toast.error(data.message);
-      }
-    })
-    .catch(() => {
-      // Show error message
-      toast.error('An error occurred. Please try again.');
+const handleSignIn = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/v1/users/login', {
+      method: 'POST',
+      credentials: 'include', // Ensures cookies are sent/received for authentication
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form.value),
     });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // Show success message
+      toast.success('Sign in successful! Redirecting...');
+      console.log(data);
+
+      // Redirect to the dashboard or protected route
+      router.push('/');
+    } else {
+      // Show error message if login fails
+      toast.error(data.message || 'Sign in failed. Please check your credentials.');
+    }
+  } catch (error) {
+    // Handle network or server errors
+    console.error('An error occurred during sign-in:', error);
+    toast.error('An error occurred. Please try again.');
+  }
 };
 </script>
 
