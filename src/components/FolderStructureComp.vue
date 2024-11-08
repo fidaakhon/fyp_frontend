@@ -1,12 +1,11 @@
 <template>
   <div class="container">
     <div class="template-container">
-      <h3>Templates</h3>
       <div @click="createMindMap" class="blank-map">
         <span style="font-size: 40px;">+</span>
         <span>Blank Map</span>
       </div>
-      <button @click="logout">logout</button>
+      <button @click="logout" class="logoutbtn">logout</button>
     </div>
     <div>
       <h3>All Maps</h3>
@@ -373,7 +372,7 @@ const router = useRouter();
 // Function to create a new mind map
 
 watch(currentUser, () => {
-  if (currentUser != null) {
+  if (currentUser.value != null) {
     fetch(`http://localhost:8000/api/v1/mindmaps/get-all-mindmaps/${currentUser.value}`, {
       method: 'GET',
       headers: {
@@ -515,6 +514,18 @@ thead {
   max-width: 1440px;
   margin: auto;
   padding: 20px;
+}
+
+.template-container {
+  display: flex;
+  justify-content: space-between;
+  width: 90vw;
+  align-items: center;
+}
+
+.logoutbtn {
+  height: 60px;
+  font-size: 20px;
 }
 
 button {

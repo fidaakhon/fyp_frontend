@@ -125,6 +125,7 @@ import 'vue3-toastify/dist/index.css';
 const router = useRouter();
 const id = ref(1);
 const currentUser = ref("")
+const mindmapTitle = ref(`Mind Map ${id.value + 1}`)
 
 
 id.value = router.currentRoute.value.params.id
@@ -155,7 +156,7 @@ onMounted(() => {
 async function createMindmap() {
     const mindmap = {
         id: mindmaps.value.length + 1,
-        title: 'Mind Map' + mindmaps.value.length,
+        title: mindmapTitle.value,
         nodes: nodes?.value,
         userId: currentUser.value
     }
@@ -170,7 +171,7 @@ async function createMindmap() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            toast(data?.message, {
+            toast("mindmap created successfully", {
                 autoClose: 3000
             })
         })
@@ -228,6 +229,7 @@ const selectedNodes = ref([]);
 const contextMenu = ref(null)
 
 
+
 const props = defineProps({
     NodeBgColor: {
         type: Object,
@@ -252,6 +254,10 @@ const props = defineProps({
     handleUpdate: {
         type: Boolean,
         required: true
+    },
+    name: {
+        type: String,
+        required: true
     }
 })
 
@@ -275,11 +281,18 @@ watch(() => props.handleUpdate, (newValue) => {
     }
 });
 
+watch(() => props.name, (newValue) => {
+    if (newValue) {
+        mindmapTitle.value = newValue
+    }
+});
+
+
 const updateMindMap = () => {
     console.log("nodes", nodes.value);
     const mindmap = {
         id: id.value,
-        title: 'Mind Map' + id.value,
+        title: mindmapTitle.value,
         nodes: nodes?.value
     }
     fetch(`http://localhost:8000/api/v1/mindmaps/update-mindmap/${id.value}`, {
@@ -337,7 +350,7 @@ function createMapHandler() {
 
     const newMindMap = {
         id: mindmaps.length + 1,
-        title: `Mind Map ${mindmaps.length + 1}`,
+        title: mindmapTitle.value,
         nodes: selectedNode.value
     };
 
@@ -361,6 +374,7 @@ const nodes = ref(
     });
 const mindmaps = ref([]);
 
+//get all mindmaps
 watch(currentUser,() => {
     fetch(`http://localhost:8000/api/v1/mindmaps/get-all-mindmaps/${currentUser.value}`, {
         method: 'GET',

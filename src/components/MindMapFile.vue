@@ -6,7 +6,7 @@
 
         <MindMap :mapId="route.params.id" @sendData="receiveData" :NodeBgColor="childData" :layout="layout"
             :style="{ transform: `scale(${transformStyle}) translateX(${contentX}px) translateY(${contentY}px)`, contentStyle }"
-            :handleSave="saveMap" :handleDelete="deleteMap" :handleUpdate="updateMap" />
+            :handleSave="saveMap" :handleDelete="deleteMap" :handleUpdate="updateMap" :name="mindmapname" />
         <div :style="{ right: data ? '0%' : '-100%' }" class="information-container">
             <div class="tab-container">
                 <div @click="() => {
@@ -15,11 +15,11 @@
                 <div :style="tab == 'info' ? { backgroundColor: 'black', color: 'white' } : {}" @click="() => {
                     tab = 'info'
                 }">Info</div>
-                <div :style="tab == 'log' ? { backgroundColor: 'black', color: 'white' } : {}" @click="() => {
+                <!-- <div :style="tab == 'log' ? { backgroundColor: 'black', color: 'white' } : {}" @click="() => {
                     tab = 'log'
-                }">Log</div>
+                }">Log</div> -->
             </div>
-            <!-- <div v-if="tab == 'info'">
+            <div v-if="tab == 'info'">
 
                 <h1>{{ data.label }}</h1>
                 <h4>Description</h4>
@@ -35,7 +35,7 @@
                     <li>Iman</li>
                     <li>Fida</li>
                 </ul> <br>
-            </div> -->
+            </div>
             <div v-if="tab == 'format'">
                 <br> <br>
                 <label for="bg-color">Type:</label>
@@ -46,18 +46,18 @@
                     <option value="story">Story</option>
                 </select>
                 <br>
-                <label for="bg-color">Text color:</label> <input v-model="textColor" id="bg-color" type="color">
+                <!-- <label for="bg-color">Text color:</label> <input v-model="textColor" id="bg-color" type="color"> -->
                 <br><br>
                 <label for="bg-color">Border Style:</label>
 
-                <select v-model="borderStyle" name="borderStyle" id="borderStyle">
+                 <select v-model="borderStyle" name="borderStyle" id="borderStyle">
                     <option value="dotted">Dotted</option>
                     <option value="dashed">Dashed</option>
                     <option value="groove">Groove</option>
                     <option default value="solid ">Solid</option>
                     <option value="none ">none</option>
                 </select> <br><br>
-                <div class="radius">
+                <!--<div class="radius">
                     <label for="">border shape: </label>
                     <select v-model="borderShape" multiple name="borderShape" id="borderShape">
                         <option value="tlr">top left round </option>
@@ -65,7 +65,10 @@
                         <option default value="brr">bottom right round</option>
                         <option value="blr">bottom left round</option>
                     </select>
-                </div>
+                </div> -->
+
+                <label for="Name">Mindmap Name</label>
+                <input type="text"  class="nameinpt" v-model="mindmapname" />
             </div>
             <div v-if="tab == 'log'">
                 <ul>
@@ -119,6 +122,7 @@ const childData = reactive({})
 const tab = ref('format')
 const borderStyle = ref('solid');
 const borderShape = ref(['trr', 'tlr', 'brr', 'blr']);
+const mindmapname = ref("")
 
 const contentStyle = computed(() => ({
     transform: `translateX(${contentX.value}px)`
@@ -309,9 +313,19 @@ body {
     border-radius: 100%;
     margin: 5px 0;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 15px;
     aspect-ratio: 1;
-    width: 60px;
+    
+}
+
+select {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.nameinpt {
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .zoom-controls button:hover {
