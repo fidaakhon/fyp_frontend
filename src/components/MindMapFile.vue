@@ -15,30 +15,18 @@
                 <div :style="tab == 'info' ? { backgroundColor: 'black', color: 'white' } : {}" @click="() => {
                     tab = 'info'
                 }">Info</div>
-                <!-- <div :style="tab == 'log' ? { backgroundColor: 'black', color: 'white' } : {}" @click="() => {
-                    tab = 'log'
-                }">Log</div> -->
             </div>
             <div v-if="tab == 'info'">
 
-                <h1>{{ data.label }}</h1>
-                <h4>Description</h4>
-                <p> Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fugit iusto ab possimus, impedit iste
-                    facilis
-                    voluptatibus
-                    sapiente incidunt eum quod quas qui.
-                </p>
+                <h1>Title : {{ data.label }}</h1>
                 <label for="">Type : &nbsp; </label>
-                <span>{{ data?.type }}</span> <br> <br>
-                <label for="">Developers engaged : &nbsp; </label>
-                <ul>
-                    <li>Iman</li>
-                    <li>Fida</li>
-                </ul> <br>
+                <span>{{ data?.type }}</span>
+                <p>Node NO. : {{ data.id }}</p>
+                <br> <br> <br>
             </div>
             <div v-if="tab == 'format'">
                 <br> <br>
-                <label for="bg-color">Type:</label>
+                <label for="bg-color">Choose Type</label> <br>
                 <select v-model="bgColor" name="bgColor" id="bgColor">
                     <option value="module">Module</option>
                     <option value="milestone">milestone</option>
@@ -48,9 +36,9 @@
                 <br>
                 <!-- <label for="bg-color">Text color:</label> <input v-model="textColor" id="bg-color" type="color"> -->
                 <br><br>
-                <label for="bg-color">Border Style:</label>
+                <label for="bg-color">Select Border Style</label><br>
 
-                 <select v-model="borderStyle" name="borderStyle" id="borderStyle">
+                <select v-model="borderStyle" name="borderStyle" id="borderStyle">
                     <option value="dotted">Dotted</option>
                     <option value="dashed">Dashed</option>
                     <option value="groove">Groove</option>
@@ -67,17 +55,8 @@
                     </select>
                 </div> -->
 
-                <label for="Name">Mindmap Name</label>
-                <input type="text"  class="nameinpt" v-model="mindmapname" />
-            </div>
-            <div v-if="tab == 'log'">
-                <ul>
-
-
-                    <li v-for="history in historyArr" :key="history">
-                        {{ history }}</li>
-
-                </ul>
+                <label for="Name">Write Mindmap Name</label>
+                <input type="text" placeholder="name" class="nameinpt" v-model="mindmapname" />
             </div>
 
         </div>
@@ -315,12 +294,13 @@ body {
     cursor: pointer;
     font-size: 15px;
     aspect-ratio: 1;
-    
+
 }
 
 select {
     padding: 10px;
     border-radius: 10px;
+    width: 100%;
 }
 
 .nameinpt {

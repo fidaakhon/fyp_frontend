@@ -211,7 +211,7 @@ async function deleteMindMap() {
 
 const nodeWidth = ref(160);
 const nodeHeight = ref(40);
-const horizontalSeparation = ref(170);
+const horizontalSeparation = ref(200);
 const verticalSeparation = ref(60);
 const nodeDistance = ref(30);
 const nodeVerticalOffset = ref(-40);
