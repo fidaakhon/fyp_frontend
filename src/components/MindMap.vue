@@ -2,6 +2,8 @@
 
     <div class="mindmap-container">
 
+        <h1 class="mindmap-name">Name : {{ MindmapName }} </h1>
+
         <svg class="mindmap-svg" width="100vw" height="800">
             <g transform="translate(500, 400)">
                 <!-- Render links -->
@@ -20,7 +22,7 @@
                         :transform="`translate(${node.x},${node.y})`">
                         <foreignObject @contextmenu.prevent="showContextMenu(node, $event)" @click="onNodeClick(node)"
                             :x="-nodeWidth / 2" :y="0"
-                            :style="(selectedNode?.id === node?.id || node.editing == true || selectedNodes.some((el) => el.id == node.id)) ? { outline: `4px ${node.borderStyle} #3CC553`, padding: '10px', border: 'none', backgroundColor: getBackgroundColor(node.type), color: node.textColor } : { border: `1px ${node.borderStyle} black`, backgroundColor: getBackgroundColor(node.type), padding: '10px', }"
+                            :style="(selectedNode?.id === node?.id || node.editing == true || selectedNodes.some((el) => el.id == node.id)) ? { outline: `4px ${node.borderStyle} #3CC553`, padding: '10px', border: 'none', backgroundColor: getBackgroundColor(node.type), color: node.textColor } : { border: `1px ${node.borderStyle} black`, backgroundColor: getBackgroundColor(node.type), padding: '10px', borderRadius: '10px'  }"
                             :width="nodeWidth" :height="nodeHeight" style="overflow: visible;display: flex; ">
                             <div style="display: flex; justify-content: start;align-items: center; gap: 2px;">
                                 <!-- <img src="../assets/Ellipse4.png" alt="dev"> -->
@@ -227,6 +229,7 @@ const suggestionInput = ref(null);
 const suggestions = ref([]);
 const selectedNodes = ref([]);
 const contextMenu = ref(null)
+const MindmapName = ref("")
 
 
 
@@ -401,6 +404,7 @@ function renderNodes() {
     const mapdata = mindmaps.value.filter((el) => el.id == id.value)
     if (mapdata) {
         nodes.value = mapdata[0].nodes
+        MindmapName.value = mapdata[0].title
     } else {
         nodes.value = {
             id: 1,
@@ -1278,6 +1282,12 @@ const openMenu = (node) => {
 .menu-content {
     display: flex;
     flex-direction: column;
+}
+
+.mindmap-name {
+    position: absolute;
+    top: 0;
+    margin: 0 auto;
 }
 
 .menu-content input {

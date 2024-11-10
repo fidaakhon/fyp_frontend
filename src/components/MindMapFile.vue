@@ -17,8 +17,7 @@
                 }">Info</div>
             </div>
             <div v-if="tab == 'info'">
-
-                <h1>Title : {{ data.label }}</h1>
+                <h3>Node Title : {{ data.label }}</h3>
                 <label for="">Type : &nbsp; </label>
                 <span>{{ data?.type }}</span>
                 <p>Node NO. : {{ data.id }}</p>
