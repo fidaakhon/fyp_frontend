@@ -5,6 +5,7 @@ import FolderStructureComp from "../components/FolderStructureComp.vue";
 // import api from '../utils/axiosConfig';
 import SignupPage from "../pages/signup/SignupPage.vue";
 import SigninPage from "../pages/signin/SigninPage.vue";
+import ForgetPasswor from '@/pages/forgetpassword/ForgetPasswor.vue';
 // import axios from 'axios';
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
     { path: '/signup', component: SignupPage },
     { path: '/signin', component: SigninPage },
     { path: '/mindMap/:id', component: MindMapFile, meta: { requiresAuth: true } },
+    { path: '/forgot-password', component: ForgetPasswor },
 ];
 
 const router = createRouter({

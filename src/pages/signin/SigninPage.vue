@@ -31,7 +31,7 @@
 
       <!-- Additional Links -->
       <div class="signin-links">
-        <a href="#">Forgot Password?</a>
+        <a href="/forgot-password">Forgot Password?</a>
         <a href="/signup">Create an Account</a>
       </div>
     </form>
@@ -82,8 +82,7 @@ const handleSignIn = async () => {
     }
   } catch (error) {
     // Handle network or server errors
-    console.error('An error occurred during sign-in:', error);
-    toast.error('An error occurred. Please try again.');
+    toast.error('Sign in failed. Please check your credentials.');
   }
 };
 </script>
