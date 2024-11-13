@@ -63,7 +63,7 @@
             <button @click="updateMindmap">update</button>
             <button @click="saveMindmap">Save</button>
             <button @click="deleteMindmap">Delete</button>
-            <RouterLink to="/"> <button>back</button></RouterLink>
+            <RouterLink to="/"> <button class="bk-btn">back</button></RouterLink>
             <button @click="() => {
 
 
@@ -309,5 +309,17 @@ select {
 
 .zoom-controls button:hover {
     background-color: #3a59d1;
+}
+
+.bk-btn {
+    width: 100%;
+}
+
+
+@media screen and (max-width: 800px) {
+    .zoom-controls {
+        bottom: 0px;
+        top: 20px;
+    }
 }
 </style>

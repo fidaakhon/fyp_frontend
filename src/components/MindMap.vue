@@ -2,7 +2,7 @@
 
     <div class="mindmap-container">
 
-        <h1 class="mindmap-name">Name : {{ MindmapName }} </h1>
+        <!-- <h1 class="mindmap-name">Name : {{ MindmapName }} </h1> -->
 
         <svg class="mindmap-svg" width="100vw" height="800">
             <g transform="translate(500, 400)">
